@@ -9,7 +9,8 @@ brew cask install google-drive
 brew cask install atom
 brew cask install skype
 brew cask install java
-brew cask install franz
+brew cask install alfred
+brew cask install dash
 
 gem_install_or_update 'ru'
 gem_install_or_update 'pulsar'
