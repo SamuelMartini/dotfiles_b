@@ -12,6 +12,7 @@ brew cask install java
 brew cask install alfred
 brew cask install dash
 
+echo 'remember to run "brew cask cleanup" to remove installation package'
 gem_install_or_update 'ru'
 gem_install_or_update 'pulsar'
 
