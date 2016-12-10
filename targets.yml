@@ -7,8 +7,6 @@ rbenv:
   '*': '~/.rbenv/'
 ruby:
   '*': '~'
-ssh:
-  'config': '~/.ssh/'
 system:
   'laptop': '~/.laptop.local'
 vim:

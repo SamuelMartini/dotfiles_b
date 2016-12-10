@@ -3,7 +3,6 @@
 brew tap homebrew/services
 brew tap caskroom/cask
 
-brew cask install dropbox
 brew cask install google-chrome
 brew cask install iterm2
 brew cask install google-drive
@@ -11,7 +10,6 @@ brew cask install atom
 brew cask install skype
 brew cask install java
 brew cask install franz
-brew cask install firefox
 
 gem_install_or_update 'ru'
 gem_install_or_update 'pulsar'
