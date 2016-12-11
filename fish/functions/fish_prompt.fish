@@ -1,53 +1,45 @@
-set -g __fish_git_prompt_show_informative_status 0
-set -g __fish_git_prompt_hide_untrackedfiles 0
-
-set -g __fish_git_prompt_color_branch cyan
-set -g __fish_git_prompt_showupstream "informative"
-set -g __fish_git_prompt_char_upstream_ahead "↑"
-set -g __fish_git_prompt_char_upstream_behind "↓"
-set -g __fish_git_prompt_char_upstream_prefix ""
-
-set -g __fish_git_prompt_char_stagedstate "●"
-set -g __fish_git_prompt_char_dirtystate "✚"
-set -g __fish_git_prompt_char_untrackedfiles "…"
-set -g __fish_git_prompt_char_conflictedstate "✖"
-set -g __fish_git_prompt_char_cleanstate "✔"
-
-set -g __fish_git_prompt_color_dirtystate blue
-set -g __fish_git_prompt_color_stagedstate yellow
-set -g __fish_git_prompt_color_invalidstate red
-set -g __fish_git_prompt_color_untrackedfiles $fish_color_normal
-set -g __fish_git_prompt_color_cleanstate green
-
-function fish_prompt --description 'Write out the prompt'
+function fish_prompt
+  # Cache exit status
   set -l last_status $status
 
-  # User
-  set_color $fish_color_user
-  echo -n (whoami)
-  set_color normal
-
-  echo -n ' at '
-
-  # Host
-  set_color $fish_color_host
-  echo -n (hostname -s)
-  set_color normal
-
-  echo -n ' in '
-
-  # PWD
-  set_color $fish_color_cwd
-  echo -n (prompt_pwd)
-  set_color normal
-
-  printf '%s ' (__fish_git_prompt)
-  echo
-
-  if not test $last_status -eq 0
-    set_color $fish_color_error
+  # Just calculate these once, to save a few cycles when displaying the prompt
+  if not set -q __fish_prompt_hostname
+    set -g __fish_prompt_hostname (hostname|cut -d . -f 1)
+  end
+  if not set -q __fish_prompt_char
+    switch (id -u)
+      case 0
+        set -g __fish_prompt_char \u276f\u276f
+      case '*'
+        set -g __fish_prompt_char »
+    end
   end
 
-  echo -n '$ '
-  set_color normal
+  # Setup colors
+  set -l normal (set_color normal)
+  set -l cyan (set_color cyan)
+  set -l yellow (set_color yellow)
+  set -l bpurple (set_color -o purple)
+  set -l bred (set_color -o red)
+  set -l bcyan (set_color -o cyan)
+  set -l bwhite (set_color -o white)
+
+  # Configure __fish_git_prompt
+  set -g __fish_git_prompt_show_informative_status true
+  set -g __fish_git_prompt_showcolorhints true
+
+  # Color prompt char red for non-zero exit status
+  set -l pcolor $bpurple
+  if [ $last_status -ne 0 ]
+    set pcolor $bred
+  end
+
+  # Top
+  echo -n $cyan$USER$normal at $yellow$__fish_prompt_hostname$normal in $bred(prompt_pwd)$normal
+  __fish_git_prompt
+
+  echo
+
+  # Bottom
+  echo -n $pcolor$__fish_prompt_char $normal
 end
